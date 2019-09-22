@@ -1,0 +1,48 @@
+<div class="row" style="margin-top: .25em">
+    <div class="col-6">
+        <button type="button" pButton icon="pi pi-plus" class="ui-button-success" (click)="showDialogToAdd()" label="Add" [disabled]="isAddDisabled" style="margin-right: .25em;"></button>
+        <button type="button" pButton icon="pi pi-times" class="ui-button-danger" (click)="clearAll()" label="Clear" [disabled]="!isClearEnabled"></button>
+    </div>
+    <div class="col-6" style="text-align: right">
+        <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+          
+    </div>
+</div>
+<p-card [style]="{'margin-top': '.25em'}" *ngIf="emptyListMessage">
+        {{emptyListMessage}}
+</p-card>
+<p-card header="Question {{ question.order }}" subheader="Number of answers {{ question.answerCount }}" styleClass="ui-card-shadow" [style]="{'margin-top': '.25em'}"  *ngFor="let question of questions | orderBy: orderProperty | paginate: { itemsPerPage: 5, currentPage: p, totalItems: totalQuestions }">
+    <div>
+        {{question.prompt}}
+    </div>
+    <p-footer >
+        <div style="text-align: right">     
+            <button pButton type="button" icon="pi pi-pencil" (click)="editQuestion(question)" class="ui-button-success" style="margin-right: .25em;"></button>
+            <button pButton type="button" icon="pi pi-trash" (click)="deleteQuestion(question)" class="ui-button-danger" style="margin-right: .25em; "></button>
+            <button pButton type="button" icon="pi pi-arrow-up" *ngIf="!isFirst(question.order)"
+             (click)="reorderUp(question)" class="ui-button-info" style="margin-right: .25em;"></button>
+            <button pButton type="button" icon="pi pi-arrow-down"  *ngIf="!isLast(question.order)"
+            (click)="reorderDown(question)" class="ui-button-info" style="margin-right: .25em;"></button>
+        </div>
+    </p-footer>
+</p-card>
+
+<p-dialog header="New Question" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '500px'}">
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+            <div class="ui-g-2">
+                <label for="vin">Title</label>
+            </div>
+            <div class="ui-g-10">
+                <input pInputText id="title" [(ngModel)]="newTitle" />
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
+            <button type="button" pButton class="ui-button-secondary" icon="pi pi-times" (click)="cancel()" label="Cancel"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+

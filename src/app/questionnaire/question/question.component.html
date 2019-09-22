@@ -1,0 +1,44 @@
+<div class="row" style="margin-top: .25em">
+    <div class="col-6">
+        <h5><a href="question-list">Questionnaire</a> > Question {{order}}</h5>
+    </div>
+    <div class="col-6" style="text-align: right">
+        <div class="btn-group" role="group">
+            <button pButton type="button" icon="pi pi-arrow-left" *ngIf="!isFirstQuestion()"
+            (click)="moveToPrevious()" class="ui-button-success" style="margin-right: .25em;"></button>
+            <button pButton type="button" icon="pi pi-arrow-right" *ngIf="!isLastQuestion()"
+            (click)="moveToNext()" class="ui-button-success" ></button>
+          </div>
+          
+    </div>
+</div>
+
+<div>
+    <input type="text" (blur)="saveQuestion()" pInputText 
+        style="margin-top: 10px;margin-bottom: 10px;width:100%" [(ngModel)]="question.prompt" placeholder="Title" />
+</div>
+
+<table style="margin-top:.25em;" class="col-sm-12">
+    <thead>
+        <h5>Answers</h5>
+    </thead>
+    <tbody>
+        <tr style="border-top: 1px solid #a6a6a6;" *ngFor="let answer of question.answers | orderBy:orderProperty">
+            <td style="width:4em">{{answer.order}}.</td>
+            <td><input type="text" (keydown.enter)="addAnswerAndSave(answer)" pInputText style="margin-top: 10px;margin-bottom: 10px;width:100%" [(ngModel)]="answer.body" /></td>
+            <td style="text-align: right;width:8em">
+                <button pButton type="button" icon="pi pi-trash" (click)="deleteAnswer(answer)" class="ui-button-danger" style="margin-right: .25em; "></button>
+                <button pButton type="button" icon="pi pi-arrow-up" *ngIf="!isFirst(answer.order)"
+                    (click)="reorderUp(answer)" class="ui-button-info" style="margin-right: .25em;"></button>
+                <button pButton type="button" icon="pi pi-arrow-down"  *ngIf="!isLast(answer.order)"
+                (click)="reorderDown(answer)" class="ui-button-info" style="margin-right: .25em;"></button>
+            </td>
+        </tr>
+        <tr style="border-top: 1px solid #a6a6a6;">
+                <td style="width:4em">{{question.answers.length + 1}}.</td>
+                <td><input type="text" (keydown.enter)="addToAnswersAndSave(newAnswerText)" pInputText style="margin-top: 10px;margin-bottom: 10px;width:100%" [(ngModel)]="newAnswerText" /></td>
+                <td></td>
+            </tr>
+    </tbody>
+</table>
+
